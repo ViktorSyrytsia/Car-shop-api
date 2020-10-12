@@ -1,0 +1,11 @@
+{
+  "name": "car-shop-api",
+  "version": "1.0.0",
+  "description": "Test task for Chatbot.studio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "syrytsiaviktor@gmail.com",
+  "license": "ISC"
+}
