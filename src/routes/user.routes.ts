@@ -1,10 +1,10 @@
 import express, { Router } from 'express';
-import { getAllCustomers } from '../controllers/customers.controller';
+import { getAllUsers } from '../controllers/users.controller';
 
 const router: Router = express.Router();
 
 router
     .route('/')
-    .get(getAllCustomers);
+    .get(getAllUsers);
 
 export default router;
