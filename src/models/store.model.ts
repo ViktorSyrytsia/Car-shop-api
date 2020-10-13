@@ -18,7 +18,7 @@ class ProductInStore extends Typegoose {
   public product: Ref<Product>;
 
   @prop({ ref: () => Provider, required: true })
-  public provider: Ref<Provider>
+  public provider: Ref<Provider>;
 
   @prop({ required: true })
   public price: number;
@@ -26,6 +26,5 @@ class ProductInStore extends Typegoose {
   @prop({ required: true })
   public quantity: number;
 }
-
 
 export const storeModel = new Store().getModelForClass(Store);

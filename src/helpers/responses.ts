@@ -6,7 +6,7 @@ const success = (res: Response, code: number, json?: Object) => {
     status: 'ok',
     data: json
   });
-}
+};
 
 const fail = (res: Response, httpError: HttpError) => {
   return res.status(httpError.code).json({
@@ -14,6 +14,6 @@ const fail = (res: Response, httpError: HttpError) => {
     code: httpError.code,
     message: httpError.message
   });
-}
+};
 
-export default { success, fail }
+export default { success, fail };

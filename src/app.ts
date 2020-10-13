@@ -6,7 +6,8 @@ import { default as sessions } from 'express-session';
 import connectRedis from 'connect-redis';
 import ioredis from 'ioredis';
 
-import usersRoutes from './routes/user.routes';
+import userRoutes from './routes/user.routes';
+import authRoutes from './routes/auth.routes';
 import dbConnection from './db/db.connection';
 
 dotenv.config();
@@ -34,7 +35,8 @@ app.use(sessions({
     }),
 }));
 
-app.use('/users', usersRoutes);
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server started on localhost:8080`);
