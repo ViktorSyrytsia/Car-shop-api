@@ -1,15 +1,18 @@
-import { Connection, createConnection } from 'mongoose';
+import mongoose from 'mongoose';
 
-export class DatabaseConnection extends Connection {
-    public static createConnection(): DatabaseConnection {
-        return createConnection(
-            process.env.MONGO_URL!,
-            {
-                dbName: 'car-shop',
-                useUnifiedTopology: true,
-                useNewUrlParser: true,
-                useFindAndModify: false
-            }
-        );
-    }
-}
+export default (db: string) => {
+  const connect = () => {
+    mongoose
+            .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+            .then(() => {
+              return console.log(`Successfully connected to ${db}`);
+            })
+            .catch((error) => {
+              console.log('Error connecting to database: ', error);
+              return process.exit(1);
+            });
+  };
+  connect();
+
+  mongoose.connection.on('disconnected', connect);
+};
