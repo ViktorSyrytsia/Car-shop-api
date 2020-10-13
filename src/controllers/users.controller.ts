@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
-import { DocumentUser } from 'src/models/user.model';
+import { DocumentUser } from '../models/user.model';
 import usersService from '../db/users.service';
 import responses from '../helpers/responses';
 

@@ -8,6 +8,7 @@ import ioredis from 'ioredis';
 
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import providersRoutes from './routes/provider.routes'
 import dbConnection from './db/db.connection';
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use(sessions({
 
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
+app.use('/providers', providersRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`Server started on localhost:8080`);
