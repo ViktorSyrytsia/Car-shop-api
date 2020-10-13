@@ -19,11 +19,11 @@ export class User extends Typegoose {
     @prop({ required: false, default: 'user' })
     public role?: string
 
-    @prop({ required: false, default: Date() })
-    public createdAt?: Date;
+    @prop({ required: false, default: Date.now() })
+    public createdAt?: number;
 
-    @prop({ required: false, default: Date() })
-    public updatedAt?: Date;
+    @prop({ required: false, default: Date.now() })
+    public updatedAt?: number;
 }
 
 export const userModel = new User().getModelForClass(User);
