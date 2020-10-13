@@ -6,6 +6,8 @@ import { DocumentUser } from '../models/user.model';
 import usersService from '../db/users.service';
 import responses from '../helpers/responses';
 import { HttpError } from '../helpers/http-error';
+import { Error } from 'mongoose';
+
 
 const signUp = async (req: Request, res: Response) => {
   try {
@@ -27,13 +29,27 @@ const signIn = async (req: Request, res: Response) => {
       req.session!.userId = user._id;
       return responses.success(res, StatusCodes.OK, user);
     }
-    return responses.fail(
-      res, new HttpError(StatusCodes.UNAUTHORIZED, 'Wrong email or password')
-    );
-
+    return responses.fail(res, new HttpError(StatusCodes.UNAUTHORIZED, 'Wrong email or password'));
   } catch (error) {
     return responses.fail(res, error);
   }
 };
 
-export default { signUp, signIn };
+const signOut = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie(process.env.SESSION_COOKIE_ID as string);
+    req.session!.destroy((err) => {
+      if (err) {
+        throw new Error(`Session error: ${err}`)
+      }
+    })
+    return responses.success(res, StatusCodes.OK, {});
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      status: "fail",
+      message: error.message
+    })
+  }
+};
+
+export default { signUp, signIn, signOut };
