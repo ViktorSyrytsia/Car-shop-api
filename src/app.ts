@@ -8,12 +8,12 @@ import ioredis from 'ioredis';
 
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
-import providersRoutes from './routes/provider.routes'
+import providerRoutes from './routes/provider.routes';
 import dbConnection from './db/db.connection';
 
 dotenv.config();
 
-const RedisStore = connectRedis(sessions);
+const redisStore = connectRedis(sessions);
 const redis = new ioredis();
 const db: string = process.env.MONGO_URL!;
 const app: express.Application = express();
@@ -23,23 +23,23 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 dbConnection(db);
 app.use(sessions({
-    secret: process.env.SESSION_SECRET!,
-    name: process.env.SESSION_COOKIE_ID,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-    store: new RedisStore({
-        host: process.env.REDIS_HOST,
-        port: +process.env.REDIS_PORT!,
-        client: redis,
-        ttl: +process.env.REDIS_TTL!
-    }),
+  secret: process.env.SESSION_SECRET!,
+  name: process.env.SESSION_COOKIE_ID,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  store: new redisStore({
+    host: process.env.REDIS_HOST,
+    port: +process.env.REDIS_PORT!,
+    client: redis,
+    ttl: +process.env.REDIS_TTL!
+  }),
 }));
 
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
-app.use('/providers', providersRoutes)
+app.use('/providers', providerRoutes);
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server started on localhost:8080`);
+  console.log(`Server started on localhost:8080`);
 });

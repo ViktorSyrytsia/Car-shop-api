@@ -25,8 +25,13 @@ const create = async (provider: CreateQuery<DocumentProvider>): Promise<Document
   }
 };
 
-const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentProvider>): Promise<DocumentProvider> => {
-  const provider = await providerModel.findByIdAndUpdate({ _id: id }, { updatedAt: Date.now(), ...body }, { new: true, useFindAndModify: false });
+const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentProvider>)
+  : Promise<DocumentProvider> => {
+  const provider = await providerModel
+    .findByIdAndUpdate(
+      { _id: id }, { updatedAt: Date.now(), ...body },
+      { new: true, useFindAndModify: false }
+    );
   if (!provider) {
     throw new HttpError(StatusCodes.NOT_FOUND, 'Provider not found');
   }

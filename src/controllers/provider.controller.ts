@@ -17,7 +17,8 @@ const findAllProviders = async (_: Request, res: Response) => {
 
 const findProviderById = async (req: Request, res: Response) => {
   try {
-    const provider: DocumentProvider = await providerService.findById(new Types.ObjectId(req.params.id));
+    const provider: DocumentProvider =
+      await providerService.findById(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, provider);
   } catch (error) {
     return responses.fail(res, error);
@@ -48,11 +49,15 @@ const updateProvider = async (req: Request & { body: DocumentProvider }, res: Re
 
 const deleteProvider = async (req: Request, res: Response) => {
   try {
-    const deletedProvider: DocumentProvider = await providerService.deleteProvider(new Types.ObjectId(req.params.id));
+    const deletedProvider: DocumentProvider =
+      await providerService.deleteProvider(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, deletedProvider);
   } catch (error) {
     return responses.fail(res, error);
   }
 };
 
-export default { findAllProviders, findProviderById, deleteProvider, updateProvider, createProvider };
+export default {
+  findAllProviders, findProviderById,
+  deleteProvider, updateProvider, createProvider
+};

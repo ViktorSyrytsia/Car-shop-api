@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 import { authMiddleware } from '../middlewares/auth.middleware';
-import { protectMiddleware } from '../middlewares/protected.middleware'
+import { protectMiddleware } from '../middlewares/protected.middleware';
 import providerController from '../controllers/provider.controller';
 
 const router: Router = express.Router();

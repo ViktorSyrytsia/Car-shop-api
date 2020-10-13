@@ -2,6 +2,8 @@
     "defaultSeverity": "error",
     "extends": "tslint-config-airbnb",
     "rules": {
+        "max-line-length": [true, 100],
+        "indent": [true, "spaces", 4],
         "object-literal-shorthand": false,
         "no-console": false,
         "max-classes-per-file": false,

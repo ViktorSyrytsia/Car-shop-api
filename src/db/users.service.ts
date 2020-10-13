@@ -33,8 +33,13 @@ const create = async (user: CreateQuery<DocumentUser>): Promise<DocumentUser> =>
   }
 };
 
-const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentUser>): Promise<DocumentUser> => {
-  const user = await userModel.findByIdAndUpdate({ _id: id }, { updatedAt: Date.now(), ...body }, { new: true, useFindAndModify: false });
+const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentUser>)
+  : Promise<DocumentUser> => {
+  const user = await userModel.findByIdAndUpdate(
+    { _id: id },
+    { updatedAt: Date.now(), ...body },
+    { new: true, useFindAndModify: false }
+  );
   if (!user) {
     throw new HttpError(StatusCodes.NOT_FOUND, 'User not found');
   }

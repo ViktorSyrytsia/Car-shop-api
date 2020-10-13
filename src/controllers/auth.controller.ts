@@ -8,7 +8,6 @@ import responses from '../helpers/responses';
 import { HttpError } from '../helpers/http-error';
 import { Error } from 'mongoose';
 
-
 const signUp = async (req: Request, res: Response) => {
   try {
     const hashPassword = await argon2.hash(req.body.password);
@@ -40,15 +39,15 @@ const signOut = async (req: Request, res: Response) => {
     res.clearCookie(process.env.SESSION_COOKIE_ID as string);
     req.session!.destroy((err) => {
       if (err) {
-        throw new Error(`Session error: ${err}`)
+        throw new Error(`Session error: ${err}`);
       }
-    })
+    });
     return responses.success(res, StatusCodes.OK, {});
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      status: "fail",
+      status: 'fail',
       message: error.message
-    })
+    });
   }
 };
 
