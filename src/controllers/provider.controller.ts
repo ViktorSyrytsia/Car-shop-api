@@ -6,9 +6,9 @@ import { DocumentProvider } from '../models/provider.model';
 import providerService from '../db/provider.service';
 import responses from '../helpers/responses';
 
-const findAllProviders = async (_: Request, res: Response) => {
+const findAllProviders = async (req: Request, res: Response) => {
   try {
-    const providers: DocumentProvider[] = await providerService.findAll();
+    const providers: DocumentProvider[] = await providerService.findAll(req.query);
     return responses.success(res, StatusCodes.OK, providers);
   } catch (error) {
     return responses.fail(res, error);

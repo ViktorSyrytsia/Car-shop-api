@@ -3,9 +3,15 @@ import { StatusCodes } from 'http-status-codes';
 
 import { HttpError } from '../helpers/http-error';
 import { DocumentProvider, providerModel } from '../models/provider.model';
+import QueryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (): Promise<DocumentProvider[]> => {
-  return await providerModel.find();
+const findAll = async (requestQuery: any): Promise<DocumentProvider[]> => {
+  const mongoQuery = new QueryUpgrade(providerModel.find(), requestQuery)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate()
+  return await mongoQuery.query
 };
 
 const findById = async (id: Types.ObjectId): Promise<DocumentProvider> => {

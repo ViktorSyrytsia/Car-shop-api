@@ -3,9 +3,15 @@ import { StatusCodes } from 'http-status-codes';
 
 import { HttpError } from '../helpers/http-error';
 import { DocumentUser, userModel } from '../models/user.model';
+import QueryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (): Promise<DocumentUser[]> => {
-  return await userModel.find();
+const findAll = async (requestQuery: any): Promise<DocumentUser[]> => {
+  const mongoQuery = new QueryUpgrade(userModel.find(), requestQuery)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate()
+  return await mongoQuery.query
 };
 
 const findByEmail = async (email: string): Promise<DocumentUser> => {

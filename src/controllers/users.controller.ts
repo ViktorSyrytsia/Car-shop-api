@@ -6,9 +6,9 @@ import { DocumentUser } from '../models/user.model';
 import usersService from '../db/users.service';
 import responses from '../helpers/responses';
 
-const findAllUsers = async (_: Request, res: Response) => {
+const findAllUsers = async (req: Request, res: Response) => {
   try {
-    const users: DocumentUser[] = await usersService.findAll();
+    const users: DocumentUser[] = await usersService.findAll(req.query);
     return responses.success(res, StatusCodes.OK, users);
   } catch (error) {
     return responses.fail(res, error);
