@@ -1,15 +1,15 @@
 import { Types } from 'mongoose';
-import { prop, Typegoose, InstanceType } from 'typegoose';
+import { prop, Typegoose, InstanceType, Ref } from 'typegoose';
 
 import { Car } from './car.model';
 import { ProductType } from './product-type.model';
 
 export class Product extends Typegoose {
   @prop({ ref: () => Car, required: true })
-  public car: Types.ObjectId;
+  car: Ref<Car | Types.ObjectId>;
 
   @prop({ ref: () => ProductType, required: true })
-  public type: Types.ObjectId;
+  type: Ref<ProductType | Types.ObjectId>;
 
   @prop({ required: true })
   public name: string;
