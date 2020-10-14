@@ -3,12 +3,12 @@ import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { DocumentProvider } from '../models/provider.model';
-import providerService from '../db/providers.service';
+import providersService from '../db/providers.service';
 import responses from '../helpers/responses';
 
 const findAllProviders = async (req: Request, res: Response) => {
   try {
-    const providers: DocumentProvider[] = await providerService.findAll(req.query);
+    const providers: DocumentProvider[] = await providersService.findAll(req.query);
     return responses.success(res, StatusCodes.OK, providers);
   } catch (error) {
     return responses.fail(res, error);
@@ -18,7 +18,7 @@ const findAllProviders = async (req: Request, res: Response) => {
 const findProviderById = async (req: Request, res: Response) => {
   try {
     const provider: DocumentProvider =
-      await providerService.findById(new Types.ObjectId(req.params.id));
+      await providersService.findById(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, provider);
   } catch (error) {
     return responses.fail(res, error);
@@ -27,7 +27,7 @@ const findProviderById = async (req: Request, res: Response) => {
 
 const createProvider = async (req: Request, res: Response) => {
   try {
-    const newProvider: DocumentProvider = await providerService.create(
+    const newProvider: DocumentProvider = await providersService.create(
       req.body
     );
     return responses.success(res, StatusCodes.OK, newProvider);
@@ -38,7 +38,7 @@ const createProvider = async (req: Request, res: Response) => {
 
 const updateProvider = async (req: Request & { body: DocumentProvider }, res: Response) => {
   try {
-    const updatedProvider: DocumentProvider = await providerService.update(
+    const updatedProvider: DocumentProvider = await providersService.update(
       new Types.ObjectId(req.params.id), req.body
     );
     return responses.success(res, StatusCodes.OK, updatedProvider);
@@ -50,7 +50,7 @@ const updateProvider = async (req: Request & { body: DocumentProvider }, res: Re
 const deleteProvider = async (req: Request, res: Response) => {
   try {
     const deletedProvider: DocumentProvider =
-      await providerService.deleteProvider(new Types.ObjectId(req.params.id));
+      await providersService.deleteProvider(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, deletedProvider);
   } catch (error) {
     return responses.fail(res, error);

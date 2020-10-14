@@ -1,4 +1,4 @@
-import { prop, Typegoose } from 'typegoose';
+import { prop, Typegoose, InstanceType } from 'typegoose';
 
 export class Car extends Typegoose {
   @prop({ required: true })
@@ -10,11 +10,12 @@ export class Car extends Typegoose {
   @prop({ required: true })
   public year: string;
 
-  @prop({ required: false, default: Date() })
-  public createdAt?: Date;
+  @prop({ required: false, default: Date.now() })
+  public createdAt?: number;
 
-  @prop({ required: false, default: Date() })
-  public updatedAt?: Date;
+  @prop({ required: false, default: Date.now() })
+  public updatedAt?: number;
 }
 
 export const carModel = new Car().getModelForClass(Car);
+export type DocumentCar = InstanceType<Car>;

@@ -2,19 +2,19 @@ import express, { Router } from 'express';
 
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { protectMiddleware } from '../middlewares/protected.middleware';
-import providerController from '../controllers/providers.controller';
+import providersController from '../controllers/providers.controller';
 
 const router: Router = express.Router();
 
 router
   .route('/')
-  .get(authMiddleware, protectMiddleware, providerController.findAllProviders)
-  .post(authMiddleware, protectMiddleware, providerController.createProvider);
+  .get(authMiddleware, protectMiddleware, providersController.findAllProviders)
+  .post(authMiddleware, protectMiddleware, providersController.createProvider);
 
 router
   .route('/:id')
-  .delete(authMiddleware, protectMiddleware, providerController.deleteProvider)
-  .get(authMiddleware, protectMiddleware, providerController.findProviderById)
-  .patch(authMiddleware, protectMiddleware, providerController.updateProvider);
+  .delete(authMiddleware, protectMiddleware, providersController.deleteProvider)
+  .get(authMiddleware, protectMiddleware, providersController.findProviderById)
+  .patch(authMiddleware, protectMiddleware, providersController.updateProvider);
 
 export default router;

@@ -3,15 +3,15 @@ import { StatusCodes } from 'http-status-codes';
 
 import { HttpError } from '../helpers/http-error';
 import { DocumentUser, userModel } from '../models/user.model';
-import QueryUpgrade from '../helpers/query-upgrade';
+import queryUpgrade from '../helpers/query-upgrade';
 
 const findAll = async (requestQuery: any): Promise<DocumentUser[]> => {
-  const mongoQuery = new QueryUpgrade(userModel.find(), requestQuery)
+  const mongoQuery = new queryUpgrade(userModel.find(), requestQuery)
     .filter()
     .sort()
     .limitFields()
-    .paginate()
-  return await mongoQuery.query
+    .paginate();
+  return await mongoQuery.query;
 };
 
 const findByEmail = async (email: string): Promise<DocumentUser> => {
@@ -32,8 +32,7 @@ const findById = async (id: Types.ObjectId): Promise<DocumentUser> => {
 
 const create = async (user: CreateQuery<DocumentUser>): Promise<DocumentUser> => {
   try {
-    const createdUser = await userModel.create(user);
-    return createdUser;
+    return await userModel.create(user);
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
