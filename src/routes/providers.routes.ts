@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { protectMiddleware } from '../middlewares/protected.middleware';
-import providerController from '../controllers/provider.controller';
+import providerController from '../controllers/providers.controller';
 
 const router: Router = express.Router();
 

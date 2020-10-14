@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { DocumentProvider } from '../models/provider.model';
-import providerService from '../db/provider.service';
+import providerService from '../db/providers.service';
 import responses from '../helpers/responses';
 
 const findAllProviders = async (req: Request, res: Response) => {

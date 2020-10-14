@@ -6,9 +6,9 @@ import { default as sessions } from 'express-session';
 import connectRedis from 'connect-redis';
 import ioredis from 'ioredis';
 
-import userRoutes from './routes/user.routes';
+import userRoutes from './routes/users.routes';
 import authRoutes from './routes/auth.routes';
-import providerRoutes from './routes/provider.routes';
+import providerRoutes from './routes/providers.routes';
 import dbConnection from './db/db.connection';
 
 dotenv.config();
