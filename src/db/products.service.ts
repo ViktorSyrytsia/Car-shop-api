@@ -10,6 +10,7 @@ const findAll = async (requestQuery: any): Promise<DocumentProduct[]> => {
     const mongoQuery =
       new queryUpgrade(productModel.find()
         .populate({ path: 'car', model: 'Car' })
+        .populate({ path: 'provider', model: 'Provider' })
         .populate({ path: 'type', model: 'ProductType' }), requestQuery)
         .filter()
         .sort()
@@ -25,6 +26,7 @@ const findByCar = async (carId: Types.ObjectId, requestQuery: any): Promise<Docu
   try {
     const mongoQuery = new queryUpgrade(productModel.find({ car: carId })
       .populate({ path: 'car', model: 'Car' })
+      .populate({ path: 'provider', model: 'Provider' })
       .populate({ path: 'type', model: 'ProductType' }), requestQuery)
       .filter()
       .sort()
@@ -42,6 +44,7 @@ const findByProductType = async (productTypeId: Types.ObjectId, requestQuery: an
   try {
     const mongoQuery = new queryUpgrade(productModel.find({ type: productTypeId })
       .populate({ path: 'car', model: 'Car' })
+      .populate({ path: 'provider', model: 'Provider' })
       .populate({ path: 'type', model: 'ProductType' }), requestQuery)
       .filter()
       .sort()
@@ -51,6 +54,23 @@ const findByProductType = async (productTypeId: Types.ObjectId, requestQuery: an
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message)
   }
+};
+
+const findByProvider = async (providerId: Types.ObjectId, requestQuery: any): Promise<DocumentProduct[]> => {
+  try {
+    const mongoQuery = new queryUpgrade(productModel.find({ provider: providerId })
+      .populate({ path: 'car', model: 'Car' })
+      .populate({ path: 'provider', model: 'Provider' })
+      .populate({ path: 'type', model: 'ProductType' }), requestQuery)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    return await mongoQuery.query;
+  } catch (error) {
+    throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message)
+  }
+
 };
 
 const findById = async (id: Types.ObjectId): Promise<DocumentProduct> => {
@@ -91,5 +111,5 @@ const deleteProduct = async (id: Types.ObjectId): Promise<DocumentProduct> => {
 };
 
 export default {
-  findAll, create, update, deleteProduct, findById, findByCar, findByProductType
+  findAll, create, update, deleteProduct, findById, findByCar, findByProductType, findByProvider
 };

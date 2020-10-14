@@ -35,6 +35,16 @@ const findProductsByType = async (req: Request, res: Response) => {
   }
 };
 
+const findProductsByProvider = async (req: Request, res: Response) => {
+  try {
+    const products: DocumentProduct[] =
+      await productsService.findByProvider(new Types.ObjectId(req.params.id), req.query);
+    return responses.success(res, StatusCodes.OK, products);
+  } catch (error) {
+    return responses.fail(res, error);
+  }
+};
+
 const findProductById = async (req: Request, res: Response) => {
   try {
     const product: DocumentProduct =
@@ -80,5 +90,5 @@ const deleteProduct = async (req: Request, res: Response) => {
 export default {
   findAllProducts, findProductsByCar,
   findProductsByType, findProductById, createProduct,
-  updateProduct, deleteProduct
+  updateProduct, deleteProduct, findProductsByProvider
 };

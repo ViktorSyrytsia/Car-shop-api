@@ -24,4 +24,9 @@ router
     .route('/type/:id')
     .get(productsController.findProductsByType);
 
+router
+    .route('/provider/:id')
+    .get(productsController.findProductsByProvider);
+
+
 export default router;
