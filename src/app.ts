@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes';
 import providersRoutes from './routes/providers.routes';
 import carsRoutes from './routes/cars.routes';
 import productTypesRoutes from './routes/product-types.routes';
+import productsRoutes from './routes/products.routes';
 import dbConnection from './db/db.connection';
 
 dotenv.config();
@@ -43,6 +44,7 @@ app.use('/auth', authRoutes);
 app.use('/providers', providersRoutes);
 app.use('/cars', carsRoutes);
 app.use('/product-types', productTypesRoutes);
+app.use('/products', productsRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on localhost:8080`);
