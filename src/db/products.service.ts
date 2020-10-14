@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { HttpError } from '../helpers/http-error';
 import { DocumentProduct, productModel } from '../models/product.model';
 import queryUpgrade from '../helpers/query-upgrade';
+import providersService from './providers.service';
 
 const findAll = async (requestQuery: any): Promise<DocumentProduct[]> => {
   try {
@@ -68,6 +69,10 @@ const findByProductType = async (productTypeId: Types.ObjectId, requestQuery: an
 const findByProvider = async (providerId: Types.ObjectId, requestQuery: any)
   : Promise<DocumentProduct[]> => {
   try {
+    const provider = await providersService.findById(providerId);
+    if (!provider) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Provider not found');
+    }
     const mongoQuery = new queryUpgrade(
       productModel
         .find({ provider: providerId })
@@ -83,7 +88,6 @@ const findByProvider = async (providerId: Types.ObjectId, requestQuery: any)
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-
 };
 
 const findById = async (id: Types.ObjectId): Promise<DocumentProduct> => {

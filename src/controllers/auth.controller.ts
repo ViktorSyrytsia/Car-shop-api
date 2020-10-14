@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import argon2 from 'argon2';
+import { Error } from 'mongoose';
 
 import { DocumentUser } from '../models/user.model';
 import usersService from '../db/users.service';
 import responses from '../helpers/responses';
 import { HttpError } from '../helpers/http-error';
-import { Error } from 'mongoose';
+import { checkError } from '../helpers/check-error';
 
 const signUp = async (req: Request, res: Response) => {
   try {
@@ -17,7 +18,7 @@ const signUp = async (req: Request, res: Response) => {
     req.session!.userId = newUser._id;
     return responses.success(res, StatusCodes.OK, newUser);
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 
@@ -30,7 +31,7 @@ const signIn = async (req: Request, res: Response) => {
     }
     return responses.fail(res, new HttpError(StatusCodes.UNAUTHORIZED, 'Wrong email or password'));
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 

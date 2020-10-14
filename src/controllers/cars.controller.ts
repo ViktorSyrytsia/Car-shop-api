@@ -5,52 +5,53 @@ import { StatusCodes } from 'http-status-codes';
 import { DocumentCar } from '../models/car.model';
 import responses from '../helpers/responses';
 import carsService from '../db/cars.service';
+import { checkError } from '../helpers/check-error';
 
 const findAllCars = async (req: Request, res: Response) => {
   try {
     const cars: DocumentCar[] = await carsService.findAll(req.query);
     return responses.success(res, StatusCodes.OK, cars);
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 
 const findCarById = async (req: Request, res: Response) => {
   try {
     const car: DocumentCar =
-            await carsService.findById(new Types.ObjectId(req.params.id));
+      await carsService.findById(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, car);
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 
 const createCar = async (req: Request, res: Response) => {
   try {
     const newCar: DocumentCar = await carsService.create(
-            req.body
-        );
+      req.body
+    );
     return responses.success(res, StatusCodes.OK, newCar);
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 
 const updateCar = async (req: Request & { body: DocumentCar }, res: Response) => {
   try {
     const updatedCar: DocumentCar = await carsService.update(
-            new Types.ObjectId(req.params.id), req.body
-        );
+      new Types.ObjectId(req.params.id), req.body
+    );
     return responses.success(res, StatusCodes.OK, updatedCar);
   } catch (error) {
-    return responses.fail(res, error);
+    return responses.fail(res, checkError(error.message));
   }
 };
 
 const deleteCar = async (req: Request, res: Response) => {
   try {
     const deletedCar: DocumentCar =
-            await carsService.deleteCar(new Types.ObjectId(req.params.id));
+      await carsService.deleteCar(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, deletedCar);
   } catch (error) {
     return responses.fail(res, error);
