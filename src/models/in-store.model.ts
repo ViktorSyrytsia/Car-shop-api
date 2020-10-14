@@ -21,4 +21,4 @@ class InStore extends Typegoose {
 }
 
 export const inStoreModel = new InStore().getModelForClass(InStore);
-export type DocumentInStore = InstanceType<InStore>
+export type DocumentInStore = InstanceType<InStore>;

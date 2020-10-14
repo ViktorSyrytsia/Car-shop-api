@@ -28,5 +28,4 @@ router
     .route('/provider/:id')
     .get(productsController.findProductsByProvider);
 
-
 export default router;
