@@ -6,20 +6,28 @@ import { DocumentCar, carModel } from '../models/car.model';
 import queryUpgrade from '../helpers/query-upgrade';
 
 const findAll = async (requestQuery: any): Promise<DocumentCar[]> => {
-  const mongoQuery = new queryUpgrade(carModel.find(), requestQuery)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  return await mongoQuery.query;
+  try {
+    const mongoQuery = new queryUpgrade(carModel.find(), requestQuery)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    return await mongoQuery.query;
+  } catch (error) {
+    throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+  }
 };
 
 const findById = async (id: Types.ObjectId): Promise<DocumentCar> => {
-  const car = await carModel.findById(id);
-  if (!car) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+  try {
+    const car = await carModel.findById(id);
+    if (!car) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+    }
+    return car;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return car;
 };
 
 const create = async (car: CreateQuery<DocumentCar>): Promise<DocumentCar> => {
@@ -32,23 +40,33 @@ const create = async (car: CreateQuery<DocumentCar>): Promise<DocumentCar> => {
 
 const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentCar>)
   : Promise<DocumentCar> => {
-  const car = await carModel
-    .findByIdAndUpdate(
-      { _id: id }, { updatedAt: Date.now(), ...body },
-      { new: true, useFindAndModify: false }
-    );
-  if (!car) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+  try {
+    const car = await carModel
+      .findByIdAndUpdate(
+        { _id: id }, { updatedAt: Date.now(), ...body },
+        { new: true, useFindAndModify: false }
+      );
+    if (!car) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+    }
+    return car;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return car;
+
 };
 
 const deleteCar = async (id: Types.ObjectId): Promise<DocumentCar> => {
-  const car = await carModel.findByIdAndDelete(id);
-  if (!car) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+  try {
+    const car = await carModel.findByIdAndDelete(id);
+    if (!car) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Car not found');
+    }
+    return car;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return car;
+
 };
 
 export default {

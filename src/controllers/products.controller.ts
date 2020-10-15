@@ -49,7 +49,7 @@ const findProductsByProvider = async (req: Request, res: Response) => {
 const findProductById = async (req: Request, res: Response) => {
   try {
     const product: DocumentProduct =
-      await productsService.findById(new Types.ObjectId(req.params.id));
+      await productsService.findById(new Types.ObjectId(req.params.id), req.query);
     return responses.success(res, StatusCodes.OK, product);
   } catch (error) {
     return responses.fail(res, checkError(error.message));
@@ -70,7 +70,7 @@ const createProduct = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request & { body: DocumentProduct }, res: Response) => {
   try {
     const updatedProduct: DocumentProduct = await productsService.update(
-      new Types.ObjectId(req.params.id), req.body
+      new Types.ObjectId(req.params.id), req.body, req.query
     );
     return responses.success(res, StatusCodes.OK, updatedProduct);
   } catch (error) {

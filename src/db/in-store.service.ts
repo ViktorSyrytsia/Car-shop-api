@@ -8,30 +8,46 @@ import queryUpgrade from '../helpers/query-upgrade';
 const findAll = async (requestQuery: any): Promise<DocumentInStore[]> => {
   try {
     const mongoQuery =
-            new queryUpgrade(
-                inStoreModel.find()
-                    .populate({ path: 'product', model: 'Product' }),
-                requestQuery)
-                .filter()
-                .sort()
-                .limitFields()
-                .paginate();
+      new queryUpgrade(
+        inStoreModel.find()
+          .populate({
+            path: 'product', model: 'Product', populate: [
+              { path: 'car', model: 'Car' },
+              { path: 'provider', model: 'Provider' },
+              { path: 'type', model: 'ProductType' }]
+          }),
+        requestQuery)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate();
     return await mongoQuery.query;
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
 };
 
-const findById = async (id: Types.ObjectId): Promise<DocumentInStore> => {
-  const productInStore = await inStoreModel.findById(id);
-  if (!productInStore) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+const findById = async (id: Types.ObjectId, requestQuery: any): Promise<DocumentInStore> => {
+  try {
+    const mongoQuery = new queryUpgrade(inStoreModel.findById(id).populate({
+      path: 'product', model: 'Product', populate: [
+        { path: 'car', model: 'Car' },
+        { path: 'provider', model: 'Provider' },
+        { path: 'type', model: 'ProductType' }]
+    }),                                 requestQuery)
+      .limitFields();
+    const productInStore = await mongoQuery.query;
+    if (!productInStore) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+    }
+    return productInStore;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return productInStore;
 };
 
 const addToStore = async (productInStore: CreateQuery<DocumentInStore>)
-    : Promise<DocumentInStore> => {
+  : Promise<DocumentInStore> => {
   try {
     return await inStoreModel.create(productInStore);
   } catch (error) {
@@ -39,25 +55,40 @@ const addToStore = async (productInStore: CreateQuery<DocumentInStore>)
   }
 };
 
-const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentInStore>)
-    : Promise<DocumentInStore> => {
-  const productInStore = await inStoreModel
-        .findByIdAndUpdate(
-            { _id: id }, { updatedAt: Date.now(), ...body },
-            { new: true, useFindAndModify: false }
-        );
-  if (!productInStore) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentInStore>, requestQuery: any)
+  : Promise<DocumentInStore> => {
+  try {
+    const mongoQuery = new queryUpgrade(inStoreModel
+      .findByIdAndUpdate(
+        { _id: id }, { updatedAt: Date.now(), ...body },
+        { new: true, useFindAndModify: false }
+      ).populate({
+        path: 'product', model: 'Product', populate: [
+          { path: 'car', model: 'Car' },
+          { path: 'provider', model: 'Provider' },
+          { path: 'type', model: 'ProductType' }]
+      }),                               requestQuery)
+      .limitFields();
+    const productInStore = await mongoQuery.query;
+    if (!productInStore) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+    }
+    return productInStore;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return productInStore;
 };
 
 const removeFromStore = async (id: Types.ObjectId): Promise<DocumentInStore> => {
-  const product = await inStoreModel.findByIdAndDelete(id);
-  if (!product) {
-    throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+  try {
+    const product = await inStoreModel.findByIdAndDelete(id);
+    if (!product) {
+      throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
+    }
+    return product;
+  } catch (error) {
+    throw new HttpError(error.code || StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }
-  return product;
 };
 
 export default {
