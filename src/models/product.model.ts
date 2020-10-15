@@ -21,6 +21,12 @@ export class Product extends Typegoose {
   @prop({ required: true })
   public description: string;
 
+  @prop({ required: false, default: 0 })
+  public quantity: number;
+
+  @prop({ required: true })
+  public price: number;
+
   @prop({ required: false, default: Date.now() })
   public createdAt?: number;
 
