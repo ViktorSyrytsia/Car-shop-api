@@ -9,103 +9,103 @@ import { checkError } from '../helpers/check-error';
 import productsService from '../db/products.service';
 
 const findAllOrders = async (req: Request, res: Response) => {
-    try {
-        const orders: DocumentOrder[] = await orderService.findAll(req.query);
-        return responses.success(res, StatusCodes.OK, orders);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+  try {
+    const orders: DocumentOrder[] = await orderService.findAll(req.query);
+    return responses.success(res, StatusCodes.OK, orders);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const findOrdersByStatus = async (req: Request, res: Response) => {
-    try {
-        const orders: DocumentOrder[] =
+  try {
+    const orders: DocumentOrder[] =
             await orderService.findByStatus(req.params.status, req.query);
-        return responses.success(res, StatusCodes.OK, orders);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+    return responses.success(res, StatusCodes.OK, orders);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const findOrdersByCustomer = async (req: Request, res: Response) => {
-    try {
-        const orders: DocumentOrder[] =
+  try {
+    const orders: DocumentOrder[] =
             await orderService.findByCustomer(new Types.ObjectId(req.params.id), req.query);
-        return responses.success(res, StatusCodes.OK, orders);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+    return responses.success(res, StatusCodes.OK, orders);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const findOrderById = async (req: Request, res: Response) => {
-    try {
-        const order: DocumentOrder =
+  try {
+    const order: DocumentOrder =
             await orderService.findById(new Types.ObjectId(req.params.id));
-        return responses.success(res, StatusCodes.OK, order);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+    return responses.success(res, StatusCodes.OK, order);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const findMyOrders = async (req: Request, res: Response) => {
-    try {
-        const myOrders: DocumentOrder[] =
+  try {
+    const myOrders: DocumentOrder[] =
             await orderService.findByCustomer(new Types.ObjectId(req.session!.userId), req.query);
-        return responses.success(res, StatusCodes.OK, myOrders);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+    return responses.success(res, StatusCodes.OK, myOrders);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const createOrder = async (req: Request, res: Response) => {
-    try {
-        const products = [];
-        for (const element of req.body.products) {
-            if (element.quantity === 0) {
-                throw new Error(`Product: ${element.name} is over`);
-            }
-            const prod = await productsService.update(
+  try {
+    const products = [];
+    for (const element of req.body.products) {
+      if (element.quantity === 0) {
+        throw new Error(`Product: ${element.name} is over`);
+      }
+      const prod = await productsService.update(
                 new Types.ObjectId(element),
                 { $inc: { quantity: -1 } },
                 req.query);
-            products.push(prod);
-        }
-        const newOrder: DocumentOrder =
-            await orderService.create({
-                products,
-                customer: new Types.ObjectId(req.session!.userId),
-                summary: products.reduce((acc, pr) => acc + pr.price, 0),
-                ...req.body
-            });
-        return responses.success(res, StatusCodes.OK, newOrder);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
+      products.push(prod);
     }
+    const newOrder: DocumentOrder =
+            await orderService.create({
+              products,
+              customer: new Types.ObjectId(req.session!.userId),
+              summary: products.reduce((acc, pr) => acc + pr.price, 0),
+              ...req.body
+            });
+    return responses.success(res, StatusCodes.OK, newOrder);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const updateOrder = async (req: Request & { body: DocumentOrder }, res: Response) => {
-    try {
-        const updatedOrder: DocumentOrder =
+  try {
+    const updatedOrder: DocumentOrder =
             await orderService.update(new Types.ObjectId(req.params.id), req.body);
-        return responses.success(res, StatusCodes.OK, updatedOrder);
-    } catch (error) {
-        return responses.fail(res, checkError(error.message));
-    }
+    return responses.success(res, StatusCodes.OK, updatedOrder);
+  } catch (error) {
+    return responses.fail(res, checkError(error.message));
+  }
 };
 
 const deleteOrder = async (req: Request, res: Response) => {
-    try {
-        const deletedOrder: DocumentOrder =
+  try {
+    const deletedOrder: DocumentOrder =
             await orderService.deleteOrder(new Types.ObjectId(req.params.id));
-        return responses.success(res, StatusCodes.OK, deletedOrder);
-    } catch (error) {
-        return responses.fail(res, error);
-    }
+    return responses.success(res, StatusCodes.OK, deletedOrder);
+  } catch (error) {
+    return responses.fail(res, error);
+  }
 };
 
 export default {
-    findAllOrders, findOrderById,
-    deleteOrder, updateOrder, createOrder,
-    findOrdersByStatus, findOrdersByCustomer,
-    findMyOrders
+  findAllOrders, findOrderById,
+  deleteOrder, updateOrder, createOrder,
+  findOrdersByStatus, findOrdersByCustomer,
+  findMyOrders
 };

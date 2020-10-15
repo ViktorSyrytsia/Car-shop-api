@@ -11,13 +11,18 @@ export class Order extends Typegoose {
   @prop({ ref: () => User, required: true })
   public customer: Ref<User | Types.ObjectId>;
 
-  @prop({ required: false, default: 'new' })
+  @prop({ required: false, enum: ['new', 'delivered', 'paid', 'closed'], default: 'new' })
   public status: string;
 
   @prop({ required: true })
   public summary: number;
 
-  @prop({ required: false })
+  @prop({
+    required: false, validate: {
+      validator: (comment) => { return comment.length > 0 && comment.length < 200; },
+      message: 'Model must be greater than 0. but shorter than 200'
+    }
+  })
   public comment?: string;
 
   @prop({ required: false, default: Date.now() })
