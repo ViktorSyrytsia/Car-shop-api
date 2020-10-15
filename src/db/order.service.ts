@@ -5,7 +5,7 @@ import { HttpError } from '../helpers/http-error';
 import { DocumentOrder, orderModel } from '../models/order.model';
 import queryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (requestQuery: any): Promise<DocumentOrder[]> => {
+const findAll = async (requestQuery?: any): Promise<DocumentOrder[]> => {
     try {
         const mongoQuery = new queryUpgrade(orderModel.find(), requestQuery)
             .filter()
@@ -18,7 +18,7 @@ const findAll = async (requestQuery: any): Promise<DocumentOrder[]> => {
     }
 };
 
-const findByStatus = async (status: string, requestQuery: any): Promise<DocumentOrder[]> => {
+const findByStatus = async (status: string, requestQuery?: any): Promise<DocumentOrder[]> => {
     try {
         const mongoQuery = new queryUpgrade(orderModel.find({ status }), requestQuery)
             .filter()
@@ -31,7 +31,7 @@ const findByStatus = async (status: string, requestQuery: any): Promise<Document
     }
 };
 
-const findByCustomer = async (customer: Types.ObjectId, requestQuery: any): Promise<DocumentOrder[]> => {
+const findByCustomer = async (customer: Types.ObjectId, requestQuery?: any): Promise<DocumentOrder[]> => {
     try {
         const mongoQuery = new queryUpgrade(orderModel.find({ customer }), requestQuery)
             .filter()
@@ -56,9 +56,9 @@ const findById = async (id: Types.ObjectId): Promise<DocumentOrder> => {
     }
 };
 
-const create = async (car: CreateQuery<DocumentOrder>): Promise<DocumentOrder> => {
+const create = async (order: CreateQuery<DocumentOrder>): Promise<DocumentOrder> => {
     try {
-        return await orderModel.create(car);
+        return await orderModel.create(order);
     } catch (error) {
         throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
     }

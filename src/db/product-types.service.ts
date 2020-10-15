@@ -5,7 +5,7 @@ import { HttpError } from '../helpers/http-error';
 import { DocumentProductType, productTypeModel } from '../models/product-type.model';
 import queryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (requestQuery: any): Promise<DocumentProductType[]> => {
+const findAll = async (requestQuery?: any): Promise<DocumentProductType[]> => {
   try {
     const mongoQuery = new queryUpgrade(productTypeModel.find(), requestQuery)
       .filter()

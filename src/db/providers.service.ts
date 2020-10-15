@@ -5,7 +5,7 @@ import { HttpError } from '../helpers/http-error';
 import { DocumentProvider, providerModel } from '../models/provider.model';
 import queryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (requestQuery: any): Promise<DocumentProvider[]> => {
+const findAll = async (requestQuery?: any): Promise<DocumentProvider[]> => {
   try {
     const mongoQuery = new queryUpgrade(providerModel.find(), requestQuery)
       .filter()

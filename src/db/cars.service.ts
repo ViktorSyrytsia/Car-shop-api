@@ -5,7 +5,7 @@ import { HttpError } from '../helpers/http-error';
 import { DocumentCar, carModel } from '../models/car.model';
 import queryUpgrade from '../helpers/query-upgrade';
 
-const findAll = async (requestQuery: any): Promise<DocumentCar[]> => {
+const findAll = async (requestQuery?: any): Promise<DocumentCar[]> => {
   try {
     const mongoQuery = new queryUpgrade(carModel.find(), requestQuery)
       .filter()

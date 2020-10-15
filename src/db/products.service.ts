@@ -8,7 +8,7 @@ import providersService from './providers.service';
 import productTypesService from './product-types.service';
 import carsService from './cars.service';
 
-const findAll = async (requestQuery: any): Promise<DocumentProduct[]> => {
+const findAll = async (requestQuery?: any): Promise<DocumentProduct[]> => {
   try {
     const mongoQuery =
       new queryUpgrade(
@@ -28,7 +28,7 @@ const findAll = async (requestQuery: any): Promise<DocumentProduct[]> => {
   }
 };
 
-const findByCar = async (carId: Types.ObjectId, requestQuery: any): Promise<DocumentProduct[]> => {
+const findByCar = async (carId: Types.ObjectId, requestQuery?: any): Promise<DocumentProduct[]> => {
   try {
     const car = await carsService.findById(carId);
     if (!car) {
@@ -51,7 +51,7 @@ const findByCar = async (carId: Types.ObjectId, requestQuery: any): Promise<Docu
   }
 };
 
-const findByProductType = async (productTypeId: Types.ObjectId, requestQuery: any)
+const findByProductType = async (productTypeId: Types.ObjectId, requestQuery?: any)
   : Promise<DocumentProduct[]> => {
   try {
     const productType = await productTypesService.findById(productTypeId);
@@ -75,7 +75,7 @@ const findByProductType = async (productTypeId: Types.ObjectId, requestQuery: an
   }
 };
 
-const findByProvider = async (providerId: Types.ObjectId, requestQuery: any)
+const findByProvider = async (providerId: Types.ObjectId, requestQuery?: any)
   : Promise<DocumentProduct[]> => {
   try {
     const provider = await providersService.findById(providerId);
@@ -99,7 +99,7 @@ const findByProvider = async (providerId: Types.ObjectId, requestQuery: any)
   }
 };
 
-const findById = async (id: Types.ObjectId, requestQuery: any): Promise<DocumentProduct> => {
+const findById = async (id: Types.ObjectId, requestQuery?: any): Promise<DocumentProduct> => {
   try {
     const mongoQuery =
       new queryUpgrade(
@@ -128,7 +128,7 @@ const create = async (product: CreateQuery<DocumentProduct>): Promise<DocumentPr
   }
 };
 
-const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentProduct>, requestQuery: any)
+const update = async (id: Types.ObjectId, body: UpdateQuery<DocumentProduct>, requestQuery?: any)
   : Promise<DocumentProduct> => {
   try {
     const mongoQuery =
