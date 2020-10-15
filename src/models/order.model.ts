@@ -11,8 +11,11 @@ export class Order extends Typegoose {
   @prop({ ref: () => User, required: true })
   public customer: Ref<User | Types.ObjectId>;
 
-  @prop({ required: true, default: 'new' })
+  @prop({ required: false, default: 'new' })
   public status: string;
+
+  @prop({ required: true })
+  public summary: number;
 
   @prop({ required: false })
   public comment?: string;
@@ -23,10 +26,7 @@ export class Order extends Typegoose {
   @prop({ required: false, default: Date.now() })
   public updatedAt?: number;
 
-  public get summary() {
-    return this.products.reduce((acc: number, prod: Product) => acc + prod.price, 0)
-  }
 }
 
 export const orderModel = new Order().getModelForClass(Order);
-export type DocumentOrder = InstanceType<Order>
+export type DocumentOrder = InstanceType<Order>;

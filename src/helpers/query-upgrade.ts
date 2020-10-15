@@ -15,10 +15,10 @@ class QueryUpgrade {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     // const obj: object = JSON.parse(queryStr)
-    // this.query = this.query.find({ [Object.keys(obj)[0]]: new Types.ObjectId(Object.values(obj)[0]) });
+    // this.query = this.query
+    // .find({ [Object.keys(obj)[0]]: new Types.ObjectId(Object.values(obj)[0]) });
 
     this.query = this.query.find(JSON.parse(queryStr));
-
 
     return this;
   }

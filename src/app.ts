@@ -46,7 +46,7 @@ app.use('/providers', providersRoutes);
 app.use('/cars', carsRoutes);
 app.use('/product-types', productTypesRoutes);
 app.use('/products', productsRoutes);
-app.use('/orders', orderRoutes)
+app.use('/orders', orderRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on localhost:8080`);

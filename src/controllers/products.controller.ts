@@ -49,7 +49,7 @@ const findProductsByProvider = async (req: Request, res: Response) => {
 const findProductById = async (req: Request, res: Response) => {
   try {
     const product: DocumentProduct =
-      await productsService.findById(new Types.ObjectId(req.params.id), req.query);
+      await productsService.findById(new Types.ObjectId(req.params.id));
     return responses.success(res, StatusCodes.OK, product);
   } catch (error) {
     return responses.fail(res, checkError(error.message));

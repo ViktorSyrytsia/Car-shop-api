@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { Types } from 'mongoose';
+import { Error, Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { DocumentOrder } from '../models/order.model';
 import responses from '../helpers/responses';
 import orderService from '../db/order.service';
 import { checkError } from '../helpers/check-error';
-import { DocumentUser } from '../models/user.model';
-import usersService from '../db/users.service';
 import productsService from '../db/products.service';
 
 const findAllOrders = async (req: Request, res: Response) => {
@@ -23,21 +21,21 @@ const findOrdersByStatus = async (req: Request, res: Response) => {
     try {
         const orders: DocumentOrder[] =
             await orderService.findByStatus(req.params.status, req.query);
-        return responses.success(res, StatusCodes.OK, orders)
+        return responses.success(res, StatusCodes.OK, orders);
     } catch (error) {
         return responses.fail(res, checkError(error.message));
     }
-}
+};
 
 const findOrdersByCustomer = async (req: Request, res: Response) => {
     try {
         const orders: DocumentOrder[] =
             await orderService.findByCustomer(new Types.ObjectId(req.params.id), req.query);
-        return responses.success(res, StatusCodes.OK, orders)
+        return responses.success(res, StatusCodes.OK, orders);
     } catch (error) {
         return responses.fail(res, checkError(error.message));
     }
-}
+};
 
 const findOrderById = async (req: Request, res: Response) => {
     try {
@@ -51,22 +49,34 @@ const findOrderById = async (req: Request, res: Response) => {
 
 const findMyOrders = async (req: Request, res: Response) => {
     try {
-        const me: DocumentUser = await usersService.findById(new Types.ObjectId(req.session!.userId));
-        const myOrders: DocumentOrder[] = await orderService.findByCustomer(me._id, req.query)
+        const myOrders: DocumentOrder[] =
+            await orderService.findByCustomer(new Types.ObjectId(req.session!.userId), req.query);
         return responses.success(res, StatusCodes.OK, myOrders);
     } catch (error) {
         return responses.fail(res, checkError(error.message));
     }
-}
+};
 
 const createOrder = async (req: Request, res: Response) => {
     try {
         const products = [];
         for (const element of req.body.products) {
-            products.push(await productsService.findById(new Types.ObjectId(element)))
+            if (element.quantity === 0) {
+                throw new Error(`Product: ${element.name} is over`);
+            }
+            const prod = await productsService.update(
+                new Types.ObjectId(element),
+                { $inc: { quantity: -1 } },
+                req.query);
+            products.push(prod);
         }
         const newOrder: DocumentOrder =
-            await orderService.create({ products, ...req.body });
+            await orderService.create({
+                products,
+                customer: new Types.ObjectId(req.session!.userId),
+                summary: products.reduce((acc, pr) => acc + pr.price, 0),
+                ...req.body
+            });
         return responses.success(res, StatusCodes.OK, newOrder);
     } catch (error) {
         return responses.fail(res, checkError(error.message));

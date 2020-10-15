@@ -10,18 +10,17 @@ import carsService from './cars.service';
 
 const findAll = async (requestQuery?: any): Promise<DocumentProduct[]> => {
   try {
-    const mongoQuery =
-      new queryUpgrade(
-        productModel
-          .find()
-          .populate({ path: 'car', model: 'Car' })
-          .populate({ path: 'provider', model: 'Provider' })
-          .populate({ path: 'type', model: 'ProductType' }),
-        requestQuery)
-        .filter()
-        .sort()
-        .limitFields()
-        .paginate();
+    const mongoQuery = new queryUpgrade(
+      productModel
+        .find()
+        .populate({ path: 'car', model: 'Car' })
+        .populate({ path: 'provider', model: 'Provider' })
+        .populate({ path: 'type', model: 'ProductType' }),
+      requestQuery)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
     return await mongoQuery.query;
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
@@ -99,18 +98,12 @@ const findByProvider = async (providerId: Types.ObjectId, requestQuery?: any)
   }
 };
 
-const findById = async (id: Types.ObjectId, requestQuery?: any): Promise<DocumentProduct> => {
+const findById = async (id: Types.ObjectId): Promise<DocumentProduct> => {
   try {
-    const mongoQuery =
-      new queryUpgrade(
-        productModel
-          .findById(id)
-          .populate({ path: 'car', model: 'Car' })
-          .populate({ path: 'provider', model: 'Provider' })
-          .populate({ path: 'type', model: 'ProductType' }),
-        requestQuery)
-        .limitFields();
-    const product = await mongoQuery.query;
+    const product = await productModel.findById(id)
+      .populate({ path: 'car', model: 'Car' })
+      .populate({ path: 'provider', model: 'Provider' })
+      .populate({ path: 'type', model: 'ProductType' });
     if (!product) {
       throw new HttpError(StatusCodes.NOT_FOUND, 'Product not found');
     }
