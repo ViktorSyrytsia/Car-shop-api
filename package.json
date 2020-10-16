@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon dist/app.js",
+    "dev": "cp ${ENV:-'src/config/.env'} .env && nodemon dist/app.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix"
   },
   "author": "syrytsiaviktor@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "@types/cors": "^2.8.8",
-    "@types/mongoose": "^5.7.36",
     "argon2": "^0.27.0",
     "connect-redis": "^5.0.0",
     "cors": "^2.8.5",
@@ -40,6 +38,8 @@
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "nodemon": "^2.0.4",
     "npm": "^6.14.8",
-    "tslint": "^6.1.3"
+    "tslint": "^6.1.3",
+    "@types/cors": "^2.8.8",
+    "@types/mongoose": "^5.7.36"
   }
 }

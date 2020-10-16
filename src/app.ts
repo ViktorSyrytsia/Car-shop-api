@@ -6,14 +6,8 @@ import { default as sessions } from 'express-session';
 import connectRedis from 'connect-redis';
 import ioredis from 'ioredis';
 
-import usersRoutes from './routes/users.routes';
-import authRoutes from './routes/auth.routes';
-import providersRoutes from './routes/providers.routes';
-import carsRoutes from './routes/cars.routes';
-import productTypesRoutes from './routes/product-types.routes';
-import productsRoutes from './routes/products.routes';
-import orderRoutes from './routes/order.routes';
 import dbConnection from './db/db.connection';
+import router from './routes';
 
 dotenv.config();
 
@@ -40,13 +34,13 @@ app.use(sessions({
   }),
 }));
 
-app.use('/users', usersRoutes);
-app.use('/auth', authRoutes);
-app.use('/providers', providersRoutes);
-app.use('/cars', carsRoutes);
-app.use('/product-types', productTypesRoutes);
-app.use('/products', productsRoutes);
-app.use('/orders', orderRoutes);
+app.use('/users', router.usersRoutes);
+app.use('/auth', router.authRoutes);
+app.use('/providers', router.providersRoutes);
+app.use('/cars', router.carsRoutes);
+app.use('/product-types', router.productTypesRoutes);
+app.use('/products', router.productsRoutes);
+app.use('/orders', router.orderRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on localhost:8080`);
