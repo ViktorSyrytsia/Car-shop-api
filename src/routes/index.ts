@@ -7,11 +7,11 @@ import productsRoutes from './products.routes';
 import orderRoutes from './order.routes';
 
 export default {
-    usersRoutes,
-    authRoutes,
-    providersRoutes,
-    carsRoutes,
-    productTypesRoutes,
-    productsRoutes,
-    orderRoutes
-}
+  usersRoutes,
+  authRoutes,
+  providersRoutes,
+  carsRoutes,
+  productTypesRoutes,
+  productsRoutes,
+  orderRoutes
+};

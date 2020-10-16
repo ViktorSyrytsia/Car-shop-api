@@ -7,7 +7,7 @@ import connectRedis from 'connect-redis';
 import ioredis from 'ioredis';
 
 import dbConnection from './db/db.connection';
-import router from './routes';
+import routes from './routes';
 
 dotenv.config();
 
@@ -34,13 +34,13 @@ app.use(sessions({
   }),
 }));
 
-app.use('/users', router.usersRoutes);
-app.use('/auth', router.authRoutes);
-app.use('/providers', router.providersRoutes);
-app.use('/cars', router.carsRoutes);
-app.use('/product-types', router.productTypesRoutes);
-app.use('/products', router.productsRoutes);
-app.use('/orders', router.orderRoutes);
+app.use('/users', routes.usersRoutes);
+app.use('/auth', routes.authRoutes);
+app.use('/providers', routes.providersRoutes);
+app.use('/cars', routes.carsRoutes);
+app.use('/product-types', routes.productTypesRoutes);
+app.use('/products', routes.productsRoutes);
+app.use('/orders', routes.orderRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server started on localhost:8080`);
