@@ -17,7 +17,7 @@ A simple implementation of the REST API, which simulates the work of an online a
   * yarn lint - to run tslint
   
  ## DB structure visualization:
- ![structure](https://i.imgur.com/p4PdSTM.png)
+ ![structure](https://i.imgur.com/3JgzisY.png)
  
  ## Main CRUD operations and routes : 
  * User 
