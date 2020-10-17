@@ -1,9 +1,11 @@
-import { CreateQuery, Types, UpdateQuery } from 'mongoose';
+import { Types, UpdateQuery } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { HttpError } from '../helpers/http-error';
 import { DocumentOrder, orderModel } from '../models/order.model';
 import queryUpgrade from '../helpers/query-upgrade';
+import { DocumentProduct } from 'src/models/product.model';
+import productsService from './products.service';
 
 const findAll = async (requestQuery?: any): Promise<DocumentOrder[]> => {
   try {
@@ -70,9 +72,28 @@ const findById = async (id: Types.ObjectId): Promise<DocumentOrder> => {
   }
 };
 
-const create = async (order: CreateQuery<DocumentOrder>): Promise<DocumentOrder> => {
+const create = async (requestBody: any, userId: Types.ObjectId)
+  : Promise<DocumentOrder> => {
   try {
-    return await orderModel.create(order);
+    const products = [];
+    for (const element of requestBody.products) {
+      const prod: DocumentProduct = await productsService.findById(new Types.ObjectId(element));
+      if (prod.quantity === 0) {
+        throw new Error(`Product: ${element.name} is over`);
+      }
+      await productsService.update(
+        prod._id,
+        { $inc: { quantity: -1 } },
+        {});
+      products.push(prod);
+    }
+    return await orderModel.create({
+      products,
+      customer: userId,
+      summary: products.reduce((acc, pr) => acc + pr.price, 0),
+      ...requestBody
+    });
+
   } catch (error) {
     throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
   }

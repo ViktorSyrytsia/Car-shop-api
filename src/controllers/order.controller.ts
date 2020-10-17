@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { Error, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
 import { DocumentOrder } from '../models/order.model';
 import responses from '../helpers/responses';
 import orderService from '../db/order.service';
 import { checkError } from '../helpers/check-error';
-import productsService from '../db/products.service';
-import { DocumentProduct } from '../models/product.model';
 
 const findAllOrders = async (req: Request, res: Response) => {
   try {
@@ -60,26 +58,8 @@ const findMyOrders = async (req: Request, res: Response) => {
 
 const createOrder = async (req: Request, res: Response) => {
   try {
-    const products = [];
-    for (const element of req.body.products) {
-      const prod: DocumentProduct = await productsService.findById(new Types.ObjectId(element));
-      if (prod.quantity === 0) {
-        throw new Error(`Product: ${element.name} is over`);
-      }
-      const updatedProd: DocumentProduct = await productsService.update(
-        prod._id,
-        { $inc: { quantity: -1 } },
-        req.query);
-      products.push(updatedProd);
-    }
-    console.log(products);
     const newOrder: DocumentOrder =
-      await orderService.create({
-        products,
-        customer: new Types.ObjectId(req.session!.userId),
-        summary: products.reduce((acc, pr) => acc + pr.price, 0),
-        ...req.body
-      });
+      await orderService.create(req.body, new Types.ObjectId(req.session!.userId));
     return responses.success(res, StatusCodes.OK, newOrder);
   } catch (error) {
     return responses.fail(res, checkError(error.message));
